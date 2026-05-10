@@ -130,6 +130,87 @@ footer{background:var(--dark);border-top:0.5px solid #111;padding:2.5rem 3.5rem;
 .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease;}
 .reveal.visible{opacity:1;transform:none;}
 .delay-1{transition-delay:0.1s;}.delay-2{transition-delay:0.2s;}.delay-3{transition-delay:0.3s;}
+
+/* ===================== RESPONSIVE ===================== */
+
+/* Hamburger button */
+.nav-hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;cursor:pointer;padding:4px;z-index:301;}
+.nav-hamburger span{display:block;width:22px;height:1.5px;background:var(--moon);transition:all 0.3s;}
+.nav-hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+
+/* Mobile nav overlay */
+.nav-links.open{display:flex;flex-direction:column;position:fixed;inset:0;background:rgba(8,8,8,0.98);z-index:300;align-items:center;justify-content:center;gap:3rem;}
+.nav-links.open a{font-size:14px;letter-spacing:0.25em;}
+
+/* ---- TABLET ≤1024px ---- */
+@media(max-width:1024px){
+  .services-grid{grid-template-columns:repeat(2,1fr);}
+  .about-inner{gap:4rem;}
+  .contact-inner{gap:3rem;}
+  .mascots-grid{grid-template-columns:1fr;}
+  .mascot-card{min-height:360px;}
+}
+
+/* ---- MOBILE ≤768px ---- */
+@media(max-width:768px){
+  /* Nav */
+  nav{padding:1.25rem 1.5rem;}
+  .nav-links{display:none;}
+  .nav-cta{display:none;}
+  .nav-hamburger{display:flex;}
+
+  /* Hero */
+  .hero-content{padding:0 1.5rem 4rem;max-width:100%;}
+  .hero-title{font-size:clamp(3rem,13vw,5rem);}
+  .hero-desc{font-size:13px;max-width:100%;}
+  .hero-btns{flex-direction:column;align-items:flex-start;gap:1.25rem;}
+  .filmstrip{display:none;}
+  .upload-hint{display:none;}
+  .scroll-cue{display:none;}
+  .video-controls{right:1.5rem;bottom:1.5rem;}
+
+  /* Sections */
+  section{padding:5rem 1.5rem;}
+
+  /* Services */
+  .services-intro{grid-template-columns:1fr;gap:2rem;}
+  .services-grid{grid-template-columns:1fr 1fr;}
+
+  /* Reel */
+  .reel-header{padding:3rem 1.5rem 2rem;flex-direction:column;align-items:flex-start;gap:1.5rem;}
+  .reel-strip{grid-template-columns:1fr;}
+
+  /* About */
+  .about-inner{grid-template-columns:1fr;gap:3rem;}
+  .about-visual{display:none;}
+  .manifesto{font-size:1.4rem;}
+
+  /* Mascots */
+  .mascots-grid{grid-template-columns:1fr;}
+  .mascot-card{flex-direction:column;align-items:flex-start;min-height:auto;padding:2rem 1.5rem 0;gap:1.5rem;}
+  .mascot-img-wrap{width:130px;align-self:flex-end;}
+
+  /* Contact */
+  .contact-inner{grid-template-columns:1fr;gap:3rem;}
+  .form-row{grid-template-columns:1fr;}
+
+  /* Footer */
+  footer{flex-direction:column;align-items:center;gap:1.5rem;padding:2rem 1.5rem;text-align:center;}
+  .footer-links{flex-wrap:wrap;justify-content:center;gap:1.25rem;}
+}
+
+/* ---- SMALL MOBILE ≤480px ---- */
+@media(max-width:480px){
+  .services-grid{grid-template-columns:1fr;}
+  .hero-title{font-size:clamp(2.8rem,15vw,4.5rem);}
+  .section-title{font-size:clamp(2rem,10vw,3rem);}
+  nav{padding:1rem 1.25rem;}
+  section{padding:4rem 1.25rem;}
+  .reel-header{padding:2.5rem 1.25rem 1.5rem;}
+  .mascot-card{padding:1.5rem 1.25rem 0;}
+}
 </style>
 </head>
 <body>
@@ -143,6 +224,9 @@ footer{background:var(--dark);border-top:0.5px solid #111;padding:2.5rem 3.5rem;
   <li><a href="https://www.instagram.com/timewaves__" target="_blank" rel="noopener">Instagram</a></li>
   </ul>
   <a href="#contact" class="nav-cta">Hablemos</a>
+<button class="nav-hamburger" id="navHamburger" aria-label="Menú">
+  <span></span><span></span><span></span>
+</button>
 </nav>
 
 <section class="hero" id="hero">
@@ -340,6 +424,21 @@ function toggleMute(){video.muted=!video.muted;muteBtn.textContent=video.muted?'
 const reveals=document.querySelectorAll('.reveal');
 const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.12});
 reveals.forEach(el=>obs.observe(el));
+
+// Hamburger menu
+const hamburger=document.getElementById('navHamburger');
+const navLinks=document.querySelector('.nav-links');
+hamburger.addEventListener('click',()=>{
+  hamburger.classList.toggle('open');
+  navLinks.classList.toggle('open');
+  document.body.style.overflow=navLinks.classList.contains('open')?'hidden':'';
+});
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+  hamburger.classList.remove('open');
+  navLinks.classList.remove('open');
+  document.body.style.overflow='';
+}));
+
 </script>
 </body>
 </html>
