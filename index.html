@@ -228,6 +228,16 @@ footer{background:var(--dark);border-top:0.5px solid #111;padding:2.5rem 3.5rem;
   .btn-primary{padding:0.6rem 1.5rem;}
 }
   @media(max-width:768px){.footer-logo{width:100%;display:flex;justify-content:center;margin-bottom:0;}.footer-logo img{height:22px;}}
+
+/* Video Modal */
+.video-modal{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.95);align-items:center;justify-content:center;}
+.video-modal.open{display:flex;}
+.video-modal-inner{position:relative;width:90%;max-width:1100px;}
+.video-modal video{width:100%;display:block;}
+.video-modal-close{position:absolute;top:-2.5rem;right:0;font-family:var(--mono);font-size:10px;letter-spacing:0.2em;color:var(--moon);background:none;border:none;cursor:pointer;text-transform:uppercase;}
+.video-modal-close:hover{color:var(--orange);}
+.reel-frame-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.5;transition:opacity 0.4s;}
+.reel-frame:hover .reel-frame-thumb{opacity:0.7;}
 </style>
 </head>
 <body>
@@ -329,7 +339,7 @@ footer{background:var(--dark);border-top:0.5px solid #111;padding:2.5rem 3.5rem;
     <a href="#contact" class="btn-ghost" style="padding-bottom:0.5rem;">Ver Reel Completo <span>&#8594;</span></a>
   </div>
   <div class="reel-strip">
-    <div class="reel-frame reveal" data-label="Film / 2025"><div class="reel-frame-inner"><div class="reel-play"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div><p class="reel-frame-label">Proyecto 01 — Cine</p></div></div>
+    <div class="reel-frame reveal" data-label="Akuantrum / 2025" onclick="openVideoModal('assets/video/akuantrum-teaser.mp4')"><div class="reel-frame-inner"><div class="reel-play"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div><p class="reel-frame-label">Akuantrum — Teaser 2025</p></div></div>
     <div class="reel-frame reveal delay-1" data-label="Docu / 2025"><div class="reel-frame-inner"><div class="reel-play"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div><p class="reel-frame-label">Proyecto 02 — Documental</p></div></div>
     <div class="reel-frame reveal delay-2" data-label="Fashion / 2025"><div class="reel-frame-inner"><div class="reel-play"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div><p class="reel-frame-label">Proyecto 03 — Fashion Film</p></div></div>
   </div>
@@ -450,6 +460,34 @@ navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
   document.body.style.overflow='';
 }));
 
+
+function openVideoModal(src){
+  const modal=document.getElementById('videoModal');
+  const video=document.getElementById('modalVideo');
+  video.src=src;
+  video.play();
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeVideoModal(){
+  const modal=document.getElementById('videoModal');
+  const video=document.getElementById('modalVideo');
+  video.pause();
+  video.src='';
+  modal.classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('videoModal').addEventListener('click',function(e){
+  if(e.target===this)closeVideoModal();
+});
+
 </script>
+
+<div class="video-modal" id="videoModal">
+  <div class="video-modal-inner">
+    <button class="video-modal-close" onclick="closeVideoModal()">&#10005; Cerrar</button>
+    <video id="modalVideo" controls playsinline></video>
+  </div>
+</div>
 </body>
 </html>
