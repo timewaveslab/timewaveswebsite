@@ -78,8 +78,8 @@ section{padding:7rem 3.5rem;}
 .service-card:hover .service-desc{color:var(--moon);}
 .reel-section{background:var(--dark2);padding:0;}
 .reel-header{padding:5rem 3.5rem 3rem;max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-end;}
-.reel-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#111;}
-.reel-frame{aspect-ratio:16/9;background:#0d0d0d;position:relative;overflow:hidden;cursor:pointer;}
+.reel-carousel-wrapper{position:relative;overflow:hidden;}.reel-strip{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;gap:2px;background:#111;scrollbar-width:none;-ms-overflow-style:none;padding-right:0;}.reel-strip::-webkit-scrollbar{display:none;}
+.reel-frame{flex:0 0 38%;scroll-snap-align:start;aspect-ratio:16/9;background:#0d0d0d;position:relative;overflow:hidden;cursor:pointer;}
 .reel-frame-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:transparent;transition:all 0.4s;z-index:1;}
 .reel-frame:hover .reel-frame-inner{background:rgba(0,0,0,0.2);}
 .reel-frame-label{position:absolute;bottom:0;left:0;right:0;padding:2rem 1.25rem 1rem;font-family:var(--mono);font-size:9px;letter-spacing:0.15em;color:var(--light);text-transform:uppercase;opacity:1;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);z-index:2;}
@@ -87,7 +87,7 @@ section{padding:7rem 3.5rem;}
 .reel-play{width:44px;height:44px;border:1px solid rgba(216,90,48,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.3s;opacity:0.8;z-index:2;position:relative;}
 .reel-play svg{width:12px;height:12px;fill:var(--orange);margin-left:3px;}
 .reel-frame:hover .reel-play{opacity:1;border-color:var(--orange);transform:scale(1.1);}
-.reel-frame::after{content:attr(data-label);position:absolute;top:1rem;right:1rem;font-family:var(--mono);font-size:8px;letter-spacing:0.2em;color:#2a2a2a;text-transform:uppercase;}
+.reel-frame::after{content:attr(data-label);position:absolute;top:1rem;right:1rem;font-family:var(--mono);font-size:8px;letter-spacing:0.2em;color:#2a2a2a;text-transform:uppercase;}.reel-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:10;background:rgba(8,8,8,0.7);border:1px solid rgba(216,90,48,0.35);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;}.reel-arrow:hover{border-color:var(--orange);background:rgba(8,8,8,0.95);transform:translateY(-50%) scale(1.08);}.reel-arrow.prev{left:1rem;}.reel-arrow.next{right:1rem;}.reel-arrow svg{width:14px;height:14px;fill:none;stroke:var(--orange);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}.reel-placeholder{opacity:0.3;pointer-events:none;}
 .about-section{background:var(--dark);}
 .about-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.5fr;gap:8rem;align-items:center;}
 .about-visual{position:relative;}
@@ -180,7 +180,7 @@ footer{background:var(--dark);border-top:0.5px solid #111;padding:2.5rem 3.5rem;
 
   /* Reel */
   .reel-header{padding:3rem 1.5rem 2rem;flex-direction:column;align-items:flex-start;gap:1.5rem;}
-  .reel-strip{grid-template-columns:1fr;}
+  .reel-frame{flex:0 0 82%;}
 
   /* About */
   .about-inner{grid-template-columns:1fr;gap:3rem;}
@@ -338,10 +338,16 @@ footer{background:var(--dark);border-top:0.5px solid #111;padding:2.5rem 3.5rem;
     </div>
     <a href="#contact" class="btn-ghost" style="padding-bottom:0.5rem;">Ver Reel Completo <span>&#8594;</span></a>
   </div>
-  <div class="reel-strip">
-    <div class="reel-frame reveal" data-label="Akuantrum / 2025" onclick="openVideoModal('assets/video/akuantrum-teaser.mp4')"><div class="reel-frame-inner" style="background:none;"><img class="reel-frame-thumb" src="assets/images/thumbnails/amazon river .png" alt="Akuantrum Teaser"><div class="reel-play"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div><p class="reel-frame-label">Akuantrum — Teaser 2025</p></div></div>
-    <div class="reel-frame reveal delay-1" data-label="Fashion / 2025" onclick="openVideoModal('assets/video/fashion-reel.mp4')"><div class="reel-frame-inner" style="background:none;"><div class="reel-play"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div><p class="reel-frame-label">Fashion Reel — TimeWaves</p></div></div>
-    <div class="reel-frame reveal delay-2" data-label="Fashion / 2025"><div class="reel-frame-inner"><div class="reel-play"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div><p class="reel-frame-label">Proyecto 03 — Fashion Film</p></div></div>
+  <div class="reel-carousel-wrapper">
+    <button class="reel-arrow prev" onclick="scrollReel(-1)" aria-label="Anterior"><svg viewBox="0 0 14 14"><polyline points="9,2 4,7 9,12"/></svg></button>
+    <button class="reel-arrow next" onclick="scrollReel(1)" aria-label="Siguiente"><svg viewBox="0 0 14 14"><polyline points="5,2 10,7 5,12"/></svg></button>
+    <div class="reel-strip" id="reelStrip">
+      <div class="reel-frame reveal" data-label="Akuantrum / 2025" onclick="openVideoModal('assets/video/akuantrum-teaser.mp4')"><div class="reel-frame-inner" style="background:none;"><img class="reel-frame-thumb" src="assets/images/thumbnails/amazon river .png" alt="Akuantrum Teaser"><div class="reel-play"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div><p class="reel-frame-label">Akuantrum — Teaser 2025</p></div></div>
+      <div class="reel-frame" data-label="Fashion / 2025" onclick="openVideoModal('assets/video/fashion-reel.mp4')"><div class="reel-frame-inner" style="background:none;"><div class="reel-play"><svg viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg></div><p class="reel-frame-label">Fashion Reel — TimeWaves</p></div></div>
+      <div class="reel-frame reel-placeholder" data-label="Próximamente"><div class="reel-frame-inner"><p class="reel-frame-label">Próximamente</p></div></div>
+      <div class="reel-frame reel-placeholder" data-label="Próximamente"><div class="reel-frame-inner"><p class="reel-frame-label">Próximamente</p></div></div>
+      <div class="reel-frame reel-placeholder" data-label="Próximamente"><div class="reel-frame-inner"><p class="reel-frame-label">Próximamente</p></div></div>
+    </div>
   </div>
 </section>
 
@@ -460,6 +466,8 @@ navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
   document.body.style.overflow='';
 }));
 
+
+function scrollReel(dir){const strip=document.getElementById('reelStrip');const frame=strip.querySelector('.reel-frame');const w=frame.offsetWidth+2;strip.scrollBy({left:dir*w,behavior:'smooth'});}
 
 function openVideoModal(src){
   const modal=document.getElementById('videoModal');
